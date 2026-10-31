@@ -1,0 +1,12 @@
+{
+  "profile": "product-admin",
+  "sourceRoots": ["apps/desktop/src/renderer"],
+  "canonicalMap": "UX-CONTRACT.md",
+  "locale": "en",
+  "requiredCapabilities": ["Form", "Select/Listbox", "Scrollbar", "Toast", "CRUD"],
+  "ownership": { "Select/Listbox": "native" },
+  "evidence": {
+    "crudFullFlow": "apps/desktop/src/renderer/verify-browser.mjs",
+    "failurePaths": "apps/desktop/src/renderer/App.test.tsx"
+  }
+}

@@ -1,0 +1,7 @@
+.teaching-settings select{max-width:100%}
+.teaching-key-form,.teaching-active-model{margin-top:18px}
+.teaching-key-input{display:flex;align-items:center;gap:10px}
+.teaching-key-input input{min-width:0;flex:1;width:100%;box-sizing:border-box;font-size:12px}
+.teaching-key-input .text-button{flex-shrink:0}
+.teaching-key-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:12px}
+.teaching-settings .text-button{font-size:11px;color:var(--accent-strong)}

@@ -1,0 +1,11 @@
+.eleven-voice-settings>input{width:100%;box-sizing:border-box;font-size:12px}
+.eleven-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.eleven-actions .text-button,.eleven-load-more{font-size:11px;color:var(--accent-strong)}
+.eleven-search{margin:19px 0 15px}.eleven-search>div{display:flex;align-items:center;gap:8px}
+.eleven-search input{flex:1;min-width:0;font-size:12px}.eleven-search .button{flex-shrink:0}
+.eleven-load-more{margin-top:10px}
+.eleven-tuning{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.eleven-tuning label{font-size:10px;color:var(--muted)}.eleven-tuning label>span{display:flex;justify-content:space-between;gap:5px}
+.eleven-tuning output{font-variant-numeric:tabular-nums;color:var(--ink)}.eleven-tuning input{width:100%;margin:6px 0 0}
+.eleven-voice-settings select{max-width:100%}
+@media(max-width:520px){.eleven-search>div{flex-wrap:wrap}.eleven-search input{flex-basis:100%;width:100%}.eleven-tuning{grid-template-columns:1fr}.eleven-tuning label{font-size:11px}.eleven-actions{gap:10px}}

@@ -1,0 +1,44 @@
+{
+  "engine": "Kokoro v1.0 FP32 / sherpa-onnx1.13.8 CPU",
+  "voice": "af_heart",
+  "threads": 4,
+  "results": [
+    {
+      "text": "Today I would like to learn about gravitation.",
+      "synthesisMs": 888,
+      "durationSeconds": 2.5010416666666666,
+      "realTimeFactor": 0.3550890462307367,
+      "sampleRate": 24000,
+      "peak": 0.34760332107543945,
+      "rms": 0.05961962211395269,
+      "file": "C:\\Users\\Ayush Paul\\Desktop\\learner guide\\living-canvas\\docs\\voice-samples\\kokoro-heart-0.wav",
+      "recognized": "Today, I would like to learn about gravitation.",
+      "recognitionMs": 2433
+    },
+    {
+      "text": "Gravity pulls objects toward each other. The force becomes weaker as the distance grows.",
+      "synthesisMs": 1799,
+      "durationSeconds": 4.744208333333333,
+      "realTimeFactor": 0.3793006490369836,
+      "sampleRate": 24000,
+      "peak": 0.5544245839118958,
+      "rms": 0.06139823904847076,
+      "file": "C:\\Users\\Ayush Paul\\Desktop\\learner guide\\living-canvas\\docs\\voice-samples\\kokoro-heart-1.wav"
+    },
+    {
+      "text": "The square root of nine is three. Acceleration is measured in metres per second squared.",
+      "synthesisMs": 2004,
+      "durationSeconds": 4.648291666666666,
+      "realTimeFactor": 0.43117987074104086,
+      "sampleRate": 24000,
+      "peak": 0.3758070468902588,
+      "rms": 0.06275109844815203,
+      "file": "C:\\Users\\Ayush Paul\\Desktop\\learner guide\\living-canvas\\docs\\voice-samples\\kokoro-heart-2.wav"
+    },
+    {
+      "cancellation": "rejected",
+      "elapsedMs": 74,
+      "message": "Neural voice job canceled"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "engine": "Windows SAPI",
+  "voice": "Microsoft David Desktop",
+  "synthesisMs": 1167,
+  "durationSeconds": 4.6995,
+  "realTimeFactor": 0.24832428981806579,
+  "sampleRate": 24000,
+  "sampleCount": 112788,
+  "note": "Single generated English PCM trial; excludes initial voice probing, includes per-job PowerShell startup. No speaker output or microphone measurement."
+}

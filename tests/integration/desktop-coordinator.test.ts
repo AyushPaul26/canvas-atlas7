@@ -1,0 +1,85 @@
+import {it,expect} from 'vitest';
+import {LessonCoordinator} from '../../apps/desktop/src/main/ai/lesson-coordinator';
+import {SessionRepository} from '../../apps/desktop/src/main/storage/session-repository';
+import type {TutorEvent} from '@living-canvas/protocol';
+it('publishes only validated current-epoch complete beats; interruption preserves committed scene',async()=>{
+  const store=new SessionRepository(':memory:');const lesson=store.create('new topic');const events:TutorEvent[]=[];
+  let release:(value:any)=>void=()=>{};
+  const provider={complete:()=>new Promise<any>(resolve=>{release=resolve;})};
+  const teacher={buildTeacherInstructions:()=>'',buildLessonContext:()=>'',getTeachingToolParameters:()=>({}),parseTeachingBeat:(v:any)=>v};
+  const coordinator=new LessonCoordinator({store,provider,teacher,model:()=> 'account-model',emit:e=>events.push(e)});
+  const work=coordinator.send({sessionId:lesson.id,text:'teach'});await new Promise(resolve=>setTimeout(resolve,0));
+  coordinator.interrupt(lesson.id);
+  release({calls:[{type:'function_call',call_id:'one',name:'present_beat',namespace:'teaching',arguments:JSON.stringify({id:'late',narration:'late',canvas:{mode:'replace',entities:[]}})}],output:[],text:''});await work;
+  expect(events.some(e=>e.type==='beat')).toBe(false);expect(store.load(lesson.id).beats).toHaveLength(0);store.close();
+});
+it('passes tool validation feedback and actual completed output to repair request',async()=>{
+  const store=new SessionRepository(':memory:');const lesson=store.create('another topic');const requests:any[]=[];let round=0;
+  const beat={id:'beat',narration:'A fresh explanation',next:'ask',canvas:{mode:'replace',entities:[]}};
+  const provider={complete:async(request:any)=>{requests.push(structuredClone(request));round++;const call={type:'function_call' as const,call_id:String(round),name:'present_beat',namespace:'teaching',arguments:JSON.stringify(round===1?{invalid:true}:beat)};return {calls:[call],output:[call],text:''};}};
+  const teacher={buildTeacherInstructions:()=>'',buildLessonContext:()=>'',getTeachingToolParameters:()=>({}),parseTeachingBeat:(v:any)=>{if(v.invalid)throw new Error('Narration required');return v;}};
+  const coordinator=new LessonCoordinator({store,provider,teacher,model:()=> 'account-model',emit:()=>{}});
+  await coordinator.send({sessionId:lesson.id,text:'teach'});
+  expect(requests[1].input.some((v:any)=>v.type==='function_call_output'&&v.output.includes('Narration required'))).toBe(true);
+  expect(requests[1].input.some((v:any)=>v.type==='function_call'&&v.call_id==='1')).toBe(true);
+  expect(store.load(lesson.id).beats).toHaveLength(0);expect(store.events(lesson.id).some((e:any)=>e.type==='prepared-beat')).toBe(true);store.close();
+});
+it('persists actual presentation prefixes while withholding prepared narration and scene',async()=>{
+  const store=new SessionRepository(':memory:');const lesson=store.create('topic');const events:TutorEvent[]=[];
+  const beat={id:'model-id',narration:'First sentence. Second sentence.',next:'ask',canvas:{mode:'replace',entities:[{id:'object',kind:'circle',x:2,y:3}]}};
+  const provider={complete:async()=>{const call={type:'function_call' as const,call_id:'one',name:'present_beat',namespace:'teaching',arguments:JSON.stringify(beat)};return {calls:[call],output:[call],text:''};}};
+  const teacher={buildTeacherInstructions:()=>'',buildLessonContext:()=>'',getTeachingToolParameters:()=>({}),parseTeachingBeat:(v:any)=>v};
+  const coordinator=new LessonCoordinator({store,provider,teacher,model:()=> 'account-model',emit:e=>events.push(e)});
+  await coordinator.send({sessionId:lesson.id,text:'teach'});
+  expect(store.load(lesson.id).scene).toEqual([]);expect(store.load(lesson.id).messages.filter(m=>m.role==='tutor')).toEqual([]);
+  const accepted=events.find(e=>e.type==='beat')! as Extract<TutorEvent,{type:'beat'}>;
+  coordinator.presentProgress({sessionId:lesson.id,epoch:accepted.epoch,beatId:accepted.beat.id,scene:accepted.beat.canvas.entities,narration:'First sentence.',complete:false});
+  expect(store.load(lesson.id).messages.at(-1)?.text).toBe('First sentence.');
+  expect(store.load(lesson.id).scene[0].id).toBe('object');
+  coordinator.interrupt(lesson.id);
+  expect(()=>coordinator.presentProgress({sessionId:lesson.id,epoch:accepted.epoch,beatId:accepted.beat.id,scene:[],narration:beat.narration,complete:true})).toThrow(/stale/i);
+  expect(store.load(lesson.id).messages.at(-1)?.text).toBe('First sentence.');store.close();
+});
+it('rejects a late beat after persisted learner edits without confusing persistence with explicit interruption',async()=>{
+  const store=new SessionRepository(':memory:');const lesson=store.create('new topic');const events:TutorEvent[]=[];let release:(value:any)=>void=()=>{};
+  const provider={complete:()=>new Promise<any>(resolve=>{release=resolve;})};
+  const teacher={buildTeacherInstructions:()=>'',buildLessonContext:()=>'',getTeachingToolParameters:()=>({}),parseTeachingBeat:(v:any)=>v};
+  const coordinator=new LessonCoordinator({store,provider,teacher,model:()=> 'account-model',emit:e=>events.push(e)});
+  const work=coordinator.send({sessionId:lesson.id,text:'teach'});await new Promise(resolve=>setTimeout(resolve,0));
+  store.saveScene(lesson.id,[{id:'learner',kind:'circle',x:42,y:3}]);
+  release({calls:[{type:'function_call',call_id:'one',name:'present_beat',namespace:'teaching',arguments:JSON.stringify({id:'late',narration:'late',canvas:{mode:'replace',entities:[]}})}],output:[],text:''});await work;
+  expect(events.some(e=>e.type==='beat')).toBe(false);expect(store.load(lesson.id).scene[0]?.id).toBe('learner');store.close();
+});
+it('globally pauses every active inference and rejects output from the superseded model',async()=>{
+  const store=new SessionRepository(':memory:');const lessons=[store.create('first topic'),store.create('second topic')];const events:TutorEvent[]=[];
+  const pending:Array<{signal:AbortSignal;release:(value:any)=>void}>=[];
+  const provider={complete:(_request:any,signal:AbortSignal)=>new Promise<any>(resolve=>pending.push({signal,release:resolve}))};
+  const teacher={buildTeacherInstructions:()=>'',buildLessonContext:()=>'',getTeachingToolParameters:()=>({}),parseTeachingBeat:(v:any)=>v};
+  const coordinator=new LessonCoordinator({store,provider,teacher,model:()=> 'old-model',emit:e=>events.push(e)});
+  const work=lessons.map(lesson=>coordinator.send({sessionId:lesson.id,text:'teach'}));
+  coordinator.cancelAll();
+  expect(events.flatMap(event=>event.type==='status'&&event.phase==='paused'?[event.sessionId]:[]).sort()).toEqual(lessons.map(lesson=>lesson.id).sort());
+  expect(pending.every(item=>item.signal.aborted)).toBe(true);
+  for(const item of pending)item.release({calls:[{type:'function_call',call_id:'old',name:'present_beat',namespace:'teaching',arguments:JSON.stringify({id:'late',narration:'Obsolete model output',next:'continue',canvas:{mode:'replace',entities:[]}})}],output:[],text:''});
+  await Promise.all(work);
+  expect(events.some(event=>event.type==='beat'||event.type==='done')).toBe(false);
+  for(const lesson of lessons){expect(store.events(lesson.id).some((event:any)=>event.type==='prepared-beat')).toBe(false);}
+  store.close();
+});
+it('globally pauses accepted presentation and revokes its acknowledgements and continuation',async()=>{
+  const store=new SessionRepository(':memory:');const lesson=store.create('topic');const events:TutorEvent[]=[];let requests=0;
+  const beat={id:'model-id',narration:'First sentence. Second sentence.',next:'continue',canvas:{mode:'replace',entities:[{id:'object',kind:'circle',x:2,y:3}]}};
+  const provider={complete:async()=>{requests++;const call={type:'function_call' as const,call_id:'one',name:'present_beat',namespace:'teaching',arguments:JSON.stringify(beat)};return {calls:[call],output:[call],text:''};}};
+  const teacher={buildTeacherInstructions:()=>'',buildLessonContext:()=>'',getTeachingToolParameters:()=>({}),parseTeachingBeat:(v:any)=>v};
+  const coordinator=new LessonCoordinator({store,provider,teacher,model:()=> 'old-model',emit:e=>events.push(e)});
+  await coordinator.send({sessionId:lesson.id,text:'teach'});
+  const accepted=events.find(event=>event.type==='beat')! as Extract<TutorEvent,{type:'beat'}>;
+  coordinator.presentProgress({sessionId:lesson.id,epoch:accepted.epoch,beatId:accepted.beat.id,scene:accepted.beat.canvas.entities,narration:'First sentence.',complete:false});
+  coordinator.cancelAll();
+  expect(events.at(-1)).toMatchObject({type:'status',sessionId:lesson.id,phase:'paused'});
+  expect((events.at(-1) as Extract<TutorEvent,{type:'status'}>).epoch).toBeGreaterThan(accepted.epoch);
+  expect(()=>coordinator.presentProgress({sessionId:lesson.id,epoch:accepted.epoch,beatId:accepted.beat.id,scene:[],narration:beat.narration,complete:true})).toThrow(/stale/i);
+  await coordinator.continueLesson({sessionId:lesson.id,epoch:accepted.epoch});
+  expect(requests).toBe(1);expect(store.load(lesson.id).messages.at(-1)?.text).toBe('First sentence.');
+  store.close();
+});

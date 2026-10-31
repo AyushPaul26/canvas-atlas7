@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "downloadPolicy": "explicit-user-action-only",
+  "recordedAt": "2026-10-22",
+  "engine": {
+    "name": "whisper.cpp",
+    "version": "1.8.2",
+    "license": "MIT",
+    "source": "https://github.com/ggml-org/whisper.cpp/tree/v1.8.2",
+    "licenseUrl": "https://github.com/ggml-org/whisper.cpp/blob/v1.8.2/LICENSE",
+    "platform": "win32-x64",
+    "archive": {
+      "id": "whisper-cpp-win-x64-1.8.2",
+      "filename": "whisper-bin-x64.zip",
+      "bytes": 3832432,
+      "sha256": "b1514ebc099765e39fa37eb780b92a140a94c86bb0b3b3d98226b38825979732",
+      "url": "https://github.com/ggml-org/whisper.cpp/releases/download/v1.8.2/whisper-bin-x64.zip"
+    },
+    "files": [
+      {
+        "id": "whisper-cli.exe",
+        "filename": "whisper-cli.exe",
+        "bytes": 481280,
+        "sha256": "dc1648751878e91acb5cfaa69bd85cff64ede44497a108844ad9d4f106cb14e8",
+        "url": "https://github.com/ggml-org/whisper.cpp/releases/download/v1.8.2/whisper-bin-x64.zip"
+      },
+      {
+        "id": "whisper.dll",
+        "filename": "whisper.dll",
+        "bytes": 483840,
+        "sha256": "4155edb6868810b56423cb0089fee85f4e8739fb86053b269f4e7c6350ec61ff",
+        "url": "https://github.com/ggml-org/whisper.cpp/releases/download/v1.8.2/whisper-bin-x64.zip"
+      },
+      {
+        "id": "ggml.dll",
+        "filename": "ggml.dll",
+        "bytes": 67584,
+        "sha256": "4f681cca3014879e623b9b44f69b0864a9ddd530c32ce05c106105f4eec0897a",
+        "url": "https://github.com/ggml-org/whisper.cpp/releases/download/v1.8.2/whisper-bin-x64.zip"
+      },
+      {
+        "id": "ggml-base.dll",
+        "filename": "ggml-base.dll",
+        "bytes": 528384,
+        "sha256": "3eefa9a256a7ef4774ec07d553ccecb771498a92000d0db7ab3443d79b795e86",
+        "url": "https://github.com/ggml-org/whisper.cpp/releases/download/v1.8.2/whisper-bin-x64.zip"
+      },
+      {
+        "id": "ggml-cpu.dll",
+        "filename": "ggml-cpu.dll",
+        "bytes": 603648,
+        "sha256": "91240f9a352783312430e3b5d816621675afd2dfb9df28161bea235c4b7f1ce3",
+        "url": "https://github.com/ggml-org/whisper.cpp/releases/download/v1.8.2/whisper-bin-x64.zip"
+      }
+    ]
+  },
+  "models": [
+    {
+      "id": "whisper-tiny-en",
+      "filename": "ggml-tiny.en.bin",
+      "bytes": 77704715,
+      "sha256": "921e4cf8686fdd993dcd081a5da5b6c365bfde1162e72b08d75ac75289920b1f",
+      "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-tiny.en.bin",
+      "engine": "whisper.cpp@1.8.2",
+      "language": "en",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/openai/whisper/blob/main/LICENSE",
+      "source": "https://huggingface.co/ggerganov/whisper.cpp/tree/5359861c739e955e79d9a303bcbc70fb988958b1",
+      "hashProvenance": "HuggingFace API LFS oid, pinned repository revision"
+    },
+    {
+      "id": "whisper-base-en",
+      "filename": "ggml-base.en.bin",
+      "bytes": 147964211,
+      "sha256": "a03779c86df3323075f5e796cb2ce5029f00ec8869eee3fdfb897afe36c6d002",
+      "url": "https://huggingface.co/ggerganov/whisper.cpp/resolve/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-base.en.bin",
+      "engine": "whisper.cpp@1.8.2",
+      "language": "en",
+      "license": "MIT",
+      "licenseUrl": "https://github.com/openai/whisper/blob/main/LICENSE",
+      "source": "https://huggingface.co/ggerganov/whisper.cpp/tree/5359861c739e955e79d9a303bcbc70fb988958b1",
+      "hashProvenance": "HuggingFace API LFS oid, pinned repository revision"
+    }
+  ],
+  "synthesis": {
+    "engine": "sherpa-onnx-node",
+    "version": "1.13.8",
+    "platformPackage": "sherpa-onnx-win-x64@1.13.8",
+    "runtimeLicense": "Apache-2.0",
+    "model": {
+      "id": "kokoro-female-en",
+      "filename": "kokoro-multi-lang-v1_0.tar.bz2",
+      "bytes": 349906910,
+      "sha256": "c5f7e2d2caf082bc1d20fb70334a61d99d20b484500aad32e7cf84c128ea3298",
+      "url": "https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/kokoro-multi-lang-v1_0.tar.bz2",
+      "license": "Apache-2.0",
+      "fileManifest": "kokoro-files.json",
+      "verifiedFileCount": 377,
+      "precision": "float32"
+    },
+    "voice": {
+      "name": "af_heart",
+      "sid": 3,
+      "language": "en-US",
+      "gender": "female",
+      "speakerMapSource": "https://k2-fsa.github.io/sherpa/onnx/tts/pretrained_models/kokoro.html"
+    },
+    "phonemizer": {
+      "name": "espeak-ng",
+      "dataDirectory": "espeak-ng-data",
+      "license": "GPL-3.0-or-later",
+      "notice": "LICENSE-espeak-ng.txt"
+    },
+    "fallback": {
+      "engine": "Windows SAPI / System.Speech",
+      "preference": "Microsoft Zira Desktop, then another installed English female voice"
+    },
+    "sampleRate": 24000,
+    "networkDuringInference": false,
+    "neuralEngineImplemented": true,
+    "cpuThreads": 4,
+    "selectionEvidence": {
+      "phrase": "Today I would like to learn about gravitation.",
+      "int8FourThreadsMs": 2675,
+      "float32FourThreadsMs": 932,
+      "note": "One controlled same-text CPU comparison; fuller Electron measurements in docs/neural-voice-trial.json."
+    }
+  }
+}

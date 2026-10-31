@@ -1,0 +1,18 @@
+.lesson-notes{display:flex;flex-direction:column;align-items:flex-end;gap:3px;min-width:0;max-width:100%}
+.lesson-notes-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px 12px}
+.lesson-notes-actions .text-button{font-size:11px;white-space:nowrap;min-height:28px;padding:3px 0}
+.lesson-notes .notes-generate{border-color:var(--border);color:var(--accent-strong)}
+.lesson-notes .notes-save,.lesson-notes .notes-offline{display:inline-flex;align-items:center;gap:4px}
+.lesson-notes-hint,.lesson-notes-feedback,.lesson-notes-error{font-size:10px;line-height:1.5;margin:0;max-width:440px;overflow-wrap:anywhere;text-align:right}
+.lesson-notes-hint{color:var(--muted)}
+.lesson-notes-feedback{color:var(--accent-strong)}
+.lesson-notes-error{color:var(--danger)}
+.lesson-playback-row{display:flex;flex:1 1 100%;align-items:center;justify-content:space-between;gap:8px 18px;min-width:0;flex-wrap:wrap}
+.lesson-playback-row>.playback-controls{flex:1 1 300px;margin:0}
+.lesson-playback-row>.lesson-notes{flex:0 1 auto}
+@media(max-width:1100px){.lesson-playback-row{gap:6px 12px}.lesson-playback-row>.playback-controls{flex-basis:270px}.lesson-playback-row>.lesson-notes{flex:1 1 100%}.lesson-notes-actions{gap:6px 8px}.lesson-notes-actions .button{padding-left:11px;padding-right:11px}.lesson-notes-hint,.lesson-notes-feedback,.lesson-notes-error{font-size:9px;max-width:330px}}
+@media(max-width:760px){.lesson-playback-row{align-items:flex-start;gap:10px}.lesson-playback-row>.playback-controls{flex-basis:100%}.lesson-playback-row>.lesson-notes{align-items:flex-start;flex-basis:100%}.lesson-notes-actions{justify-content:flex-start}.lesson-notes-hint,.lesson-notes-feedback,.lesson-notes-error{text-align:left}.lesson-notes-actions .text-button{min-height:32px}}
+.notice.safety-notice{background:var(--surface);border-color:var(--border);color:var(--ink);flex-shrink:0;align-items:center;flex-wrap:wrap}
+.notice.safety-notice>p{flex:1 1 260px;min-width:0}
+.safety-recovery-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.safety-recovery-actions .text-button{min-height:28px;white-space:nowrap}

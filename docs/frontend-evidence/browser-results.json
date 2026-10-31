@@ -1,0 +1,11 @@
+{
+  "passed": [
+    "Disconnected topic is preserved; browser sign-in clearly unavailable.",
+    "390px home and topic layouts have no horizontal overflow.",
+    "Connected test bridge: one initial request, committed scene preserved on pause, stale epoch ignored, editable note saved.",
+    "Simulation init/input/step routed through bridge; controls applied immediately.",
+    "390px lesson and modal remain usable; native model selection, Escape and trigger focus restoration verified.",
+    "Deletion names the lesson, initially focuses Cancel, and refreshes the history after confirmation."
+  ],
+  "pageErrors": []
+}

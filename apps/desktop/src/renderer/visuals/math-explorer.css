@@ -1,0 +1,13 @@
+.math-explorer { display: flex; flex-direction: column; flex: 1; min-height: 0; min-width: 0; gap: 8px; }
+.math-explorer-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; padding: 0 2px; }
+.math-explorer-heading > span { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.math-explorer-views { display: flex; gap: 8px; }
+.math-explorer-views button { min-width: 104px; }
+.math-explorer-views button[aria-pressed="true"] { color: var(--accent-strong); border-color: var(--accent); background: var(--surface); }
+.math-explorer-diagram { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; }
+.math-explorer-diagram[hidden] { display: none; }
+.math-explorer-loading { display: grid; flex-shrink: 0; place-items: center; min-height: 320px; color: var(--muted); }
+@media (min-width: 761px) {
+  .canvas-column > .math-explorer, .math-explorer-diagram { min-height: 360px; flex: 1 0 auto; }
+  .math-explorer-diagram > .visual-stage { min-height: 360px !important; flex: 1 0 auto !important; }
+}

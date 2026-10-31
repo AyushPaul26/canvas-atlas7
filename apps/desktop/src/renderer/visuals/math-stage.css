@@ -1,0 +1,20 @@
+.math-stage{flex:0 0 auto;min-width:0;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:var(--surface);color:var(--ink);font-family:var(--font-body)}
+.math-stage-axes{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;padding:12px 16px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border)}
+.math-stage-axes strong{color:var(--ink);font-weight:500}
+.math-stage-board{width:100%;height:clamp(280px,38vh,460px);min-height:280px;position:relative;overflow:hidden;touch-action:none;background:var(--surface)}
+.math-stage-board svg{display:block;max-width:100%}
+.math-stage-board svg ellipse,.math-stage-board svg circle{cursor:grab}
+.math-stage-board svg ellipse:active,.math-stage-board svg circle:active{cursor:grabbing}
+.math-stage-readout{display:flex;flex-wrap:wrap;gap:8px 20px;padding:0 16px;font-size:12px;color:var(--muted)}
+.math-stage-readout:empty{display:none}
+.math-stage-key{display:inline-flex;align-items:center;gap:7px;overflow-wrap:anywhere}
+.math-stage-key i{display:inline-block;width:16px;height:3px;border-radius:2px;flex-shrink:0}
+.math-stage-point{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:12px 16px;border-top:1px solid var(--border);font-size:12px}
+.math-stage-position{font-variant-numeric:tabular-nums;color:var(--muted)}
+.math-stage-coordinate{display:inline-flex;gap:8px;align-items:center;color:var(--muted);font-size:11px;min-width:0}
+.math-stage-coordinate input{width:85px;min-height:36px;border:1px solid var(--border);border-radius:10px;padding:6px 8px;color:var(--ink);background:var(--paper);font:12px var(--font-body);font-variant-numeric:tabular-nums}
+.math-stage-coordinate input:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
+.math-stage-coordinate input:disabled{opacity:.6;cursor:default}
+.math-stage-hint{margin:0;padding:12px 16px;color:var(--muted);font-size:11px;line-height:1.6;overflow-wrap:anywhere}
+@media(max-width:760px){.math-stage-axes,.math-stage-point{padding:10px 12px}.math-stage-coordinate{flex:1 1 160px;justify-content:space-between}.math-stage-board{height:300px}}
+@media(prefers-reduced-motion:reduce){.math-stage *{transition:none!important;animation:none!important}}
